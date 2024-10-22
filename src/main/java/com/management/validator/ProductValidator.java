@@ -4,13 +4,15 @@ import com.management.model.Product;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 
 public class ProductValidator implements ModelValidator<Product> {
+    Set<String> existingIds = new HashSet<>();
     public void validate(Product product, List<Set<String>> existFields) throws Exception {
-        Set<String> existingIds = new HashSet<String>();
-        existFields.add(existingIds);
+//        if(existFields.size() == 0) {
+//            existingIds = new HashSet<String>();
+//            existFields.add(existingIds);
+//        }
 
         String productId = product.getId();
         String productName = product.getName();

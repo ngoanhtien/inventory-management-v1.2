@@ -14,13 +14,19 @@ import java.util.Set;
 public class OrderValidator {
     private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
+    Set<String> existingIds = new HashSet<>();
+    Set<String> customerIds = new HashSet<>();
+    Set<String> productIds = new HashSet<>();
+
     public void validate(Order order, ErrorLogger errorLogger, List<Set<String>> existFields) {
-        Set<String> existingIds = new HashSet<>();
-        Set<String> customerIds = new HashSet<>();
-        Set<String> productIds = new HashSet<>();
-        existFields.add(existingIds);
-        existFields.add(customerIds);
-        existFields.add(productIds);
+        if(existFields.size() == 0) {
+            existingIds = new HashSet<>();
+            customerIds = new HashSet<>();
+            productIds = new HashSet<>();
+            existFields.add(existingIds);
+            existFields.add(customerIds);
+            existFields.add(productIds);
+        }
 
         String id = order.getId();
         String customerId = order.getCustomerId();

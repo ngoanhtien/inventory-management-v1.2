@@ -1,19 +1,20 @@
 package com.management.controller;
 
 import com.management.service.ProductService;
+import com.management.utils.ErrorLogger;
+import com.management.service.BaseService;
 
 public class ProductController {
-    public static final String OUTPUT_FILEPATH = "D:\\Downloads\\NgoAnhTien_JavaFresher_Mock1_V1.2\\src\\main\\resources\\data\\product.output.csv";
-    public static final String INPUT_FILEPATH = "D:\\Downloads\\NgoAnhTien_JavaFresher_Mock1_V1.2\\src\\main\\resources\\data\\product.origin.csv";
-
     private ProductService productService;
+    private ErrorLogger errorLogger;
 
-    public ProductController(ProductService productService) {
-        this.productService = productService;
+    public ProductController() {
+        this.errorLogger = new ErrorLogger(BaseService.PRODUCT_ERROR_FILEPATH);
+        this.productService = new ProductService(errorLogger);
     }
 
-    public void processProductData() {
-        productService.getData(INPUT_FILEPATH);
-        productService.writeData(OUTPUT_FILEPATH);
+    public void loadProducts() {
+        productService.getData(BaseService.PRODUCT_INPUT_FILEPATH);
+        productService.writeData(BaseService.PRODUCT_OUTPUT_FILEPATH);
     }
 }

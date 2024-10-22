@@ -21,10 +21,6 @@ public class ProductService extends BaseService<Product> {
         products = dataLoader.loadData(inputFilePath);
     }
 
-//    public List<Product> getDataWithoutValidation(){
-//
-//    }
-
     @Override
     public void addDataList(String newDataFilePath) {
 

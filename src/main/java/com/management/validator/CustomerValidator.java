@@ -7,17 +7,23 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-public class CustomerValidator {
+public class CustomerValidator implements ModelValidator<Customer> {
     private static final Pattern EMAIL_PATTERN = Pattern.compile("[^@ ]+@[^@ ]+\\.[^@ ]+");
     private static final Pattern PHONE_PATTERN = Pattern.compile("[0-9\\-\\+]{9,15}");
 
+    Set<String> existingIds;
+    Set<String> existingEmails;
+    Set<String> existingPhones;
+
     public void validate(Customer customer, List<Set<String>> existFields) throws Exception {
-        Set<String> existingIds = new HashSet<>();
-        Set<String> existingEmails = new HashSet<>();
-        Set<String> existingPhones = new HashSet<>();
-        existFields.add(existingIds);
-        existFields.add(existingEmails);
-        existFields.add(existingPhones);
+        if(existFields.size() == 0) {
+            existingIds = new HashSet<>();
+            existingEmails = new HashSet<>();
+            existingPhones = new HashSet<>();
+            existFields.add(existingIds);
+            existFields.add(existingEmails);
+            existFields.add(existingPhones);
+        }
 
         String id = customer.getId();
         String name = customer.getName();
