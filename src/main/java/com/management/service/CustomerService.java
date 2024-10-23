@@ -17,13 +17,15 @@ public class CustomerService extends BaseService<Customer> {
     }
 
     @Override
-    public void getData(String inputFilePath) {
+    public List<Customer> getData(String inputFilePath) {
         customers = dataLoader.loadData(inputFilePath);
+        return customers;
     }
 
     @Override
-    public void addDataList(String newDataFilePath) {
+    public List<Customer> addDataList(String newDataFilePath) {
 
+        return null;
     }
 
     @Override

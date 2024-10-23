@@ -17,13 +17,16 @@ public class ProductService extends BaseService<Product> {
     }
 
     @Override
-    public void getData(String inputFilePath) {
+    public List<Product> getData(String inputFilePath) {
         products = dataLoader.loadData(inputFilePath);
+        return products;
     }
 
     @Override
-    public void addDataList(String newDataFilePath) {
-
+    public List<Product> addDataList(String newDataFilePath) {
+        List<Product> newProducts = dataLoader.loadData(newDataFilePath);
+        products.addAll(newProducts);
+        return products;
     }
 
     @Override

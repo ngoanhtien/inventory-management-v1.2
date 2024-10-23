@@ -1,8 +1,9 @@
 package com.management.validator;
 
-import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface ModelValidator<T> {
-    public void validate(T model, List<Set<String>> existFields) throws Exception;
+    public void validate(T model) throws Exception;
+    void setExistingFields(Map<String, Set<String>> existingFields);
 }

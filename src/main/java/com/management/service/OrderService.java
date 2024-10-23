@@ -1,28 +1,38 @@
 package com.management.service;
 
+import com.management.model.Customer;
 import com.management.model.Order;
-import com.management.parser.ModelParser;
+import com.management.model.Product;
+import com.management.parser.OrderParser;
 import com.management.utils.ErrorLogger;
-import com.management.validator.ModelValidator;
+import com.management.validator.OrderValidator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OrderService extends BaseService<Order> {
+    private List<Product> productList;
+    private List<Customer> customerList;
+    private List<Order> orders = new ArrayList<>();
 
-    public OrderService(ModelParser<Order> parser, ModelValidator<Order> validator, ErrorLogger errorLogger) {
-        super(parser, validator, errorLogger);
+    public OrderService(ErrorLogger errorLogger, List<Customer> customerList, List<Product> productList) {
+        super(new OrderParser(), new OrderValidator(customerList, productList), errorLogger);
     }
 
     @Override
-    public void getData(String inputFilePath) {
-
+    public List<Order> getData(String inputFilePath) {
+        orders = dataLoader.loadData(inputFilePath);
+        return orders;
     }
 
     @Override
-    public void addDataList(String newDataFilePath) {
+    public List<Order> addDataList(String newDataFilePath) {
 
+        return null;
     }
 
     @Override
     public void writeData(String outputFilePath) {
-
+        dataWriter.writeData(orders, outputFilePath);
     }
 }

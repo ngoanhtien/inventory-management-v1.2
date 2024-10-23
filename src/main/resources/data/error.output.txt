@@ -1,0 +1,1 @@
+Invalid price format in product data: id,name,price,Stock Available

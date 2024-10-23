@@ -7,14 +7,20 @@ import com.management.parser.ModelParser;
 import com.management.utils.ErrorLogger;
 import com.management.validator.ModelValidator;
 
-public abstract class BaseService<T extends CSVConvertible> {
-    public static final String PRODUCT_OUTPUT_FILEPATH = "src\\main\\resources\\data\\product.output.csv";
-    public static final String PRODUCT_INPUT_FILEPATH = "src\\main\\resources\\data\\product.origin.csv";
-    public static final String PRODUCT_ERROR_FILEPATH = "src\\main\\resources\\data\\error.output.csv";
+import java.util.List;
 
-    public static final String CUSTOMER_OUTPUT_FILEPATH = "src\\main\\resources\\data\\customer.output.csv";
-    public static final String CUSTOMER_INPUT_FILEPATH = "src\\main\\resources\\data\\customer.origin.csv";
-    public static final String CUSTOMER_ERROR_FILEPATH = "src\\main\\resources\\data\\error.output.csv";
+public abstract class BaseService<T extends CSVConvertible> {
+    public static final String ERROR_FILEPATH = "src\\main\\resources\\data\\error.output.txt";
+
+    public static final String PRODUCT_OUTPUT_FILEPATH = "src\\main\\resources\\data\\output\\product.output.csv";
+    public static final String PRODUCT_INPUT_FILEPATH = "src\\main\\resources\\data\\origin\\product.origin.csv";
+    public static final String PRODUCT_NEW_FILEPATH = "src\\main\\resources\\data\\new\\products.new.csv";
+
+    public static final String CUSTOMER_OUTPUT_FILEPATH = "src\\main\\resources\\data\\output\\customer.output.csv";
+    public static final String CUSTOMER_INPUT_FILEPATH = "src\\main\\resources\\data\\origin\\customer.origin.csv";
+
+    public static final String ORDER_OUTPUT_FILEPATH = "src\\main\\resources\\data\\output\\order.output.csv";
+    public static final String ORDER_INPUT_FILEPATH = "src\\main\\resources\\data\\origin\\order.origin.csv";
 
     protected DataLoader<T> dataLoader;
     protected DataWriter<T> dataWriter;
@@ -26,9 +32,9 @@ public abstract class BaseService<T extends CSVConvertible> {
         this.dataWriter = new DataWriter<>();
     }
 
-    public abstract void getData(String inputFilePath);
+    public abstract List<T> getData(String inputFilePath);
 
-    public abstract void addDataList(String newDataFilePath);
+    public abstract List<T> addDataList(String newDataFilePath);
 
     public abstract void writeData(String outputFilePath);
 }

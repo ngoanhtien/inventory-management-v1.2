@@ -9,7 +9,7 @@ public class CustomerController {
     private ErrorLogger errorLogger;
 
     public CustomerController() {
-        this.errorLogger = new ErrorLogger(BaseService.CUSTOMER_ERROR_FILEPATH);
+        this.errorLogger = new ErrorLogger(BaseService.ERROR_FILEPATH);
         this.customerService = new CustomerService(errorLogger);
     }
 
