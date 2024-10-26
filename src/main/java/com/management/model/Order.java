@@ -1,6 +1,5 @@
 package com.management.model;
 
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -55,12 +54,10 @@ public class Order implements CSVConvertible, Identifiable<String> {
 
     @Override
     public String toString() {
-        return "Order{" +
-                "id='" + id + '\'' +
+        return "id='" + id + '\'' +
                 ", customerId='" + customerId + '\'' +
                 ", productQuantities=" + productQuantities +
-                ", orderDate=" + orderDate +
-                '}';
+                ", orderDate=" + orderDate;
     }
 
     @Override

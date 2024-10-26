@@ -1,17 +1,16 @@
 package com.management.dal;
 
 import com.management.model.CSVConvertible;
-import com.management.model.Identifiable;
 
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.util.Collection;
-import java.util.LinkedHashMap;
 
 public class DataWriter<T> {
     public void writeData(Collection<T> dataCollection, String filePath) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+
             for (T data : dataCollection) {
                 if (data instanceof CSVConvertible) {
                     writer.write(((CSVConvertible) data).toCSV());

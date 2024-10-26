@@ -15,6 +15,9 @@ public class Product implements CSVConvertible, Identifiable<String>{
         this.stockAvailable = stockAvailable;
     }
 
+    @Override
+    public String getId() { return this.id; }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -56,11 +59,6 @@ public class Product implements CSVConvertible, Identifiable<String>{
     @Override
     public String toCSV() {
         return String.format("%s,%s,%.2f,%d", id, name, price, stockAvailable);
-    }
-
-    @Override
-    public String getId(){
-        return this.id;
     }
 }
 

@@ -1,6 +1,8 @@
 package com.management.dal;
 
+import com.management.model.Customer;
 import com.management.model.Identifiable;
+import com.management.model.Order;
 import com.management.model.Product;
 import com.management.parser.ModelParser;
 import java.io.BufferedReader;
@@ -54,11 +56,8 @@ public class DataLoader<K, T extends Identifiable<K>> {
             while ((line = br.readLine()) != null) {
                 try {
                     T data = parser.parse(line);
-                    if(dataLinkedHashMap.containsKey(data.getId())) {
-                        throw new Exception("Duplicate product id " + data.getId() + " in line: " + line);
-                    }
                     validator.validate(data);
-                    K key = data.getId();
+                    K key = getKey(data);
                     dataLinkedHashMap.put(key, data);
                 } catch (Exception e) {
                     errorLogger.logError(e.getMessage());
@@ -68,5 +67,16 @@ public class DataLoader<K, T extends Identifiable<K>> {
             errorLogger.logError("Error reading file: " + e.getMessage());
         }
         return dataLinkedHashMap;
+    }
+
+    // Phương thức getKey
+    @SuppressWarnings("unchecked")
+    private K getKey(T data) {
+        if (data instanceof Product || data instanceof Order) {
+            return data.getId(); // Trả về id cho Product hoặc Order
+        } else if (data instanceof Customer) {
+            return (K) ((Customer) data).getPhoneNumber(); // Trả về phone number cho Customer
+        }
+        throw new IllegalArgumentException("Unable to determine key for data type: " + data.getClass().getSimpleName());
     }
 }

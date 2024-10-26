@@ -22,9 +22,15 @@ public abstract class BaseService<K, T extends Identifiable<K> & CSVConvertible>
 
     public static final String CUSTOMER_OUTPUT_FILEPATH = "src\\main\\resources\\data\\output\\customer.output.csv";
     public static final String CUSTOMER_INPUT_FILEPATH = "src\\main\\resources\\data\\origin\\customer.origin.csv";
+    public static final String CUSTOMER_NEW_FILEPATH = "src\\main\\resources\\data\\new\\customer.new.csv";
+    public static final String CUSTOMER_EDIT_FILEPATH = "src\\main\\resources\\data\\edit\\customer.edit.csv";
+    public static final String CUSTOMER_DELETE_FILEPATH = "src\\main\\resources\\data\\delete\\customer.delete.csv";
 
     public static final String ORDER_OUTPUT_FILEPATH = "src\\main\\resources\\data\\output\\order.output.csv";
     public static final String ORDER_INPUT_FILEPATH = "src\\main\\resources\\data\\origin\\order.origin.csv";
+    public static final String ORDER_NEW_FILEPATH = "src\\main\\resources\\data\\new\\order.new.csv";
+    public static final String ORDER_EDIT_FILEPATH = "src\\main\\resources\\data\\edit\\order.edit.csv";
+    public static final String ORDER_DELETE_FILEPATH = "src\\main\\resources\\data\\delete\\order.delete.csv";
 
     protected DataLoader<K, T> dataLoader;
     protected DataWriter<T> dataWriter;

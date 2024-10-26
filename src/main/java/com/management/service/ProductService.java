@@ -7,13 +7,8 @@ import com.management.validator.ProductValidator;
 
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 public class ProductService extends BaseService<String, Product> {
-
-//    private LinkedHashMap<String, Product> products;
 
     public ProductService(ErrorLogger errorLogger) {
         super(new ProductParser(), new ProductValidator(), errorLogger);
@@ -27,7 +22,7 @@ public class ProductService extends BaseService<String, Product> {
         productList.forEach(product -> {
             String productId = product.getId();
             if(dataMap.containsKey(productId)) {
-                errorLogger.logError("Duplicate product: " + product);
+                errorLogger.logError("Duplicate product id " + productId + " in " + product);
             } else {
                 dataMap.put(productId, product);
             }
@@ -49,8 +44,8 @@ public class ProductService extends BaseService<String, Product> {
 
     @Override
     public void editDataList(String editDataFilePath) {
-        LinkedHashMap<String, Product> newDataMap = dataLoader.loadDataToLinkedHashMap(editDataFilePath);
-        dataMap.putAll(newDataMap);
+        LinkedHashMap<String, Product> editDataMap = dataLoader.loadDataToLinkedHashMap(editDataFilePath);
+        dataMap.putAll(editDataMap);
     }
 
     @Override

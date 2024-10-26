@@ -6,6 +6,7 @@ public class ProductParser implements ModelParser<Product> {
     @Override
     public Product parse(String line) throws Exception {
         String[] data = line.split(",");
+
         if (line.isBlank()){
             throw new Exception("Empty line");
         } else if (data.length != 4) {
