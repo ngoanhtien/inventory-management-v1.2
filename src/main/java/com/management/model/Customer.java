@@ -1,6 +1,6 @@
 package com.management.model;
 
-public class Customer implements CSVConvertible{
+public class Customer implements CSVConvertible, Identifiable<String>{
     private String id;
     private String name;
     private String email;
@@ -15,9 +15,8 @@ public class Customer implements CSVConvertible{
         this.phoneNumber = phoneNumber;
     }
 
-    public String getId() {
-        return id;
-    }
+    @Override
+    public String getId() { return this.id; }
 
     public void setId(String id) {
         this.id = id;

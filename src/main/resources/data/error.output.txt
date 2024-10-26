@@ -1,1 +1,3 @@
 Invalid price format in product data: id,name,price,Stock Available
+Duplicate product: Product{id='P0002', name='Ốp lưng điện thoại', price=613.13, stockAvailable=663}
+Empty line

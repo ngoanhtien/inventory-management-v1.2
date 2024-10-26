@@ -7,6 +7,8 @@ import com.management.service.OrderService;
 import com.management.service.ProductService;
 import com.management.utils.ErrorLogger;
 import com.management.service.BaseService;
+
+import java.util.LinkedHashMap;
 import java.util.List;
 
 public class OrderController {
@@ -27,9 +29,9 @@ public class OrderController {
         ErrorLogger errorLogger = new ErrorLogger(BaseService.ERROR_FILEPATH);
         ProductService productService = new ProductService(errorLogger);
         CustomerService customerService = new CustomerService(errorLogger);
-        List<Product> productList = productService.getData(BaseService.PRODUCT_INPUT_FILEPATH);
-        List<Customer> customerList = customerService.getData(BaseService.CUSTOMER_INPUT_FILEPATH);
-        OrderController orderController = new OrderController(productList, customerList);
-        orderController.loadOrders();
+//        LinkedHashMap<String, Product> productList = productService.getData(BaseService.PRODUCT_INPUT_FILEPATH);
+//        LinkedHashMap<String, Customer> customerList = customerService.getData(BaseService.CUSTOMER_INPUT_FILEPATH);
+//        OrderController orderController = new OrderController(productList, customerList);
+//        orderController.loadOrders();
     }
 }

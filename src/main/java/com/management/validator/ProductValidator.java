@@ -2,12 +2,11 @@ package com.management.validator;
 
 import com.management.model.Product;
 
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
 public class ProductValidator implements ModelValidator<Product> {
-    private Map<String, Set<String>> existingFields;
+//    private Map<String, Set<String>> existingFields;
 
     @Override
     public void validate(Product product) throws Exception {
@@ -26,16 +25,15 @@ public class ProductValidator implements ModelValidator<Product> {
         }
 
         // Kiểm tra trùng lặp ID
-        Set<String> productIds = existingFields.computeIfAbsent("productIds", k -> new HashSet<>());
-        if (productIds.contains(product.getId())) {
-            throw new Exception("Duplicate Product ID: " + product.getId());
-        } else {
-            productIds.add(product.getId());
-        }
+//        Set<String> productIds = existingFields.computeIfAbsent("productIds", k -> new HashSet<>());
+//        if (productIds.contains(product.getId())) {
+//            throw new Exception("Duplicate Product ID: " + product.getId());
+//        } else {
+//            productIds.add(product.getId());
+//        }
     }
 
     @Override
     public void setExistingFields(Map<String, Set<String>> existingFields) {
-        this.existingFields = existingFields;
     }
 }

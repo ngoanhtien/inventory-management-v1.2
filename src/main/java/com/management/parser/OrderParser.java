@@ -12,8 +12,10 @@ public class OrderParser implements ModelParser<Order> {
     @Override
     public Order parse(String line) throws Exception {
         String[] data = line.split(",");
-        if (data.length != 4) {
-            throw new Exception("Invalid data format for Order: " + line);
+        if (line.isBlank()){
+            throw new Exception("Empty line");
+        } else if (data.length != 4) {
+            throw new Exception("Invalid order data format: " + line);
         }
         String id = data[0].trim();
         String customerId = data[1].trim();
@@ -37,7 +39,9 @@ public class OrderParser implements ModelParser<Order> {
     private static Map<String, Integer> getStringIntegerMap(String productsString) throws Exception {
         Map<String, Integer> productQuantities = new HashMap<>();
         if (!productsString.isEmpty()) {
+            //Mảng productEntries chứa các cặp sản phẩm và số lượng
             String[] productEntries = productsString.split(";");
+            //Duyệt mảng
             for (String entry : productEntries) {
                 String[] productQuantity = entry.split(":");
                 if (productQuantity.length != 2) {

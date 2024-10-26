@@ -6,9 +6,13 @@ public class CustomerParser implements ModelParser<Customer> {
     @Override
     public Customer parse(String line) throws Exception {
         String[] data = line.split(",");
-        if (data.length != 4) {
+
+        if (line.isBlank()){
+            throw new Exception("Empty line");
+        } else if (data.length != 4) {
             throw new Exception("Invalid customer data format: " + line);
         }
+
         String id = data[0].trim();
         String name = data[1].trim();
         String email = data[2].trim();

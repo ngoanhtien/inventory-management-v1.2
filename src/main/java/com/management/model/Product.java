@@ -1,6 +1,6 @@
 package com.management.model;
 
-public class Product implements CSVConvertible{
+public class Product implements CSVConvertible, Identifiable<String>{
     private String id;
     private String name;
     private double price;
@@ -13,10 +13,6 @@ public class Product implements CSVConvertible{
         this.name = name;
         this.price = price;
         this.stockAvailable = stockAvailable;
-    }
-
-    public String getId() {
-        return id;
     }
 
     public void setId(String id) {
@@ -60,6 +56,11 @@ public class Product implements CSVConvertible{
     @Override
     public String toCSV() {
         return String.format("%s,%s,%.2f,%d", id, name, price, stockAvailable);
+    }
+
+    @Override
+    public String getId(){
+        return this.id;
     }
 }
 

@@ -6,30 +6,37 @@ import com.management.utils.ErrorLogger;
 import com.management.validator.CustomerValidator;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 
-public class CustomerService extends BaseService<Customer> {
-
-    private List<Customer> customers = new ArrayList<>();
+public class CustomerService extends BaseService<String, Customer> {
 
     public CustomerService(ErrorLogger errorLogger) {
         super(new CustomerParser(), new CustomerValidator(), errorLogger);
     }
 
     @Override
-    public List<Customer> getData(String inputFilePath) {
-        customers = dataLoader.loadData(inputFilePath);
-        return customers;
+    public void getData(String inputFilePath) {
+        dataMap = dataLoader.loadDataToLinkedHashMap(inputFilePath);
     }
 
     @Override
-    public List<Customer> addDataList(String newDataFilePath) {
+    public void addDataList(String newDataFilePath) {
 
-        return null;
+    }
+
+    @Override
+    public void editDataList(String editDataFilePath) {
+
+    }
+
+    @Override
+    public void deleteDataList(String deleteDataFilePath) {
+
     }
 
     @Override
     public void writeData(String outputFilePath) {
-        dataWriter.writeData(customers, outputFilePath);
+        dataWriter.writeData(dataMap.values(), outputFilePath);
     }
 }

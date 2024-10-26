@@ -5,7 +5,7 @@ import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
 
-public class Order implements CSVConvertible{
+public class Order implements CSVConvertible, Identifiable<String> {
     private String id;
     private String customerId;
     private Map<String, Integer> productQuantities;
@@ -20,8 +20,9 @@ public class Order implements CSVConvertible{
         this.orderDate = orderDate;
     }
 
+    @Override
     public String getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(String id) {

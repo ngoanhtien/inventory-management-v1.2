@@ -5,32 +5,65 @@ import com.management.parser.ProductParser;
 import com.management.utils.ErrorLogger;
 import com.management.validator.ProductValidator;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
-public class ProductService extends BaseService<Product> {
+public class ProductService extends BaseService<String, Product> {
 
-    private List<Product> products = new ArrayList<>();
+//    private LinkedHashMap<String, Product> products;
 
     public ProductService(ErrorLogger errorLogger) {
         super(new ProductParser(), new ProductValidator(), errorLogger);
     }
 
     @Override
-    public List<Product> getData(String inputFilePath) {
-        products = dataLoader.loadData(inputFilePath);
-        return products;
+    public void getData(String inputFilePath) {
+        List<Product> productList = dataLoader.loadData(inputFilePath);
+        dataMap = new LinkedHashMap<>();
+
+        productList.forEach(product -> {
+            String productId = product.getId();
+            if(dataMap.containsKey(productId)) {
+                errorLogger.logError("Duplicate product: " + product);
+            } else {
+                dataMap.put(productId, product);
+            }
+        });
     }
 
     @Override
-    public List<Product> addDataList(String newDataFilePath) {
-        List<Product> newProducts = dataLoader.loadData(newDataFilePath);
-        products.addAll(newProducts);
-        return products;
+    public void addDataList(String newDataFilePath) {
+        LinkedHashMap<String, Product> newDataMap = dataLoader.loadDataToLinkedHashMap(newDataFilePath);
+
+        newDataMap.forEach((key,value) -> {
+            if(dataMap.containsKey(key)) {
+                errorLogger.logError("Duplicate product: " + key);
+            } else {
+                dataMap.put(key, value);
+            }
+        });
     }
+
+    @Override
+    public void editDataList(String editDataFilePath) {
+        LinkedHashMap<String, Product> newDataMap = dataLoader.loadDataToLinkedHashMap(editDataFilePath);
+        dataMap.putAll(newDataMap);
+    }
+
+    @Override
+    public void deleteDataList(String deleteDataFilePath) {
+        LinkedHashMap<String, Product> deleteDataMap = dataLoader.loadDataToLinkedHashMap(deleteDataFilePath);
+        deleteDataMap.forEach((key,value) -> {
+            dataMap.remove(key);
+        });
+    }
+
 
     @Override
     public void writeData(String outputFilePath) {
-        dataWriter.writeData(products, outputFilePath);
+        dataWriter.writeData(dataMap.values(), outputFilePath);
     }
 }

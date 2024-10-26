@@ -1,17 +1,25 @@
 package com.management.dal;
 
 import com.management.model.CSVConvertible;
+import com.management.model.Identifiable;
+
 import java.io.FileWriter;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.util.List;
+import java.util.Collection;
+import java.util.LinkedHashMap;
 
-public class DataWriter<T extends CSVConvertible> {
-    public void writeData(List<T> dataList, String filePath) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
-            for (T data : dataList) {
-                bw.write(data.toCSV());
-                bw.newLine();
+public class DataWriter<T> {
+    public void writeData(Collection<T> dataCollection, String filePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            for (T data : dataCollection) {
+                if (data instanceof CSVConvertible) {
+                    writer.write(((CSVConvertible) data).toCSV());
+                    writer.newLine();
+                } else {
+                    writer.write(data.toString());
+                    writer.newLine();
+                }
             }
             System.out.println("Data successfully written to " + filePath);
         } catch (IOException e) {
