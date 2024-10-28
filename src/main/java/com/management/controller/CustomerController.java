@@ -42,6 +42,6 @@ public class CustomerController {
 
     public static void main(String[] args) {
         CustomerController customerController = new CustomerController();
-        customerController.deleteCustomers();
+        customerController.addCustomers();
     }
 }

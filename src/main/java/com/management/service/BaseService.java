@@ -9,7 +9,6 @@ import com.management.utils.ErrorLogger;
 import com.management.validator.ModelValidator;
 
 import java.util.LinkedHashMap;
-import java.util.Map;
 
 public abstract class BaseService<K, T extends Identifiable<K> & CSVConvertible> {
     public static final String ERROR_FILEPATH = "src\\main\\resources\\data\\error.output.txt";
@@ -45,7 +44,7 @@ public abstract class BaseService<K, T extends Identifiable<K> & CSVConvertible>
         dataMap = new LinkedHashMap<>();
     }
 
-    public abstract void getData(String inputFilePath);
+    public abstract LinkedHashMap<K, T> getData(String inputFilePath);
 
     public abstract void addDataList(String newDataFilePath);
 

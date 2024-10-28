@@ -4,35 +4,26 @@ import com.management.model.Order;
 import com.management.model.Customer;
 import com.management.model.Product;
 
-import java.util.List;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Set;
 
 public class OrderValidator implements ModelValidator<Order> {
-    private Map<String, Set<String>> existingFields;
-    private List<Customer> customerList;
-    private List<Product> productList;
+    private LinkedHashMap<String, Product> productList;
+    private LinkedHashMap<String, Customer> customerList;
 
-    public OrderValidator(List<Customer> customerList, List<Product> productList) {
-        this.customerList = customerList;
+    public OrderValidator(LinkedHashMap<String, Product> productList,
+                          LinkedHashMap<String, Customer> customerList) {
         this.productList = productList;
+        this.customerList = customerList;
     }
 
     @Override
     public void validate(Order order) throws Exception {
-        // Kiểm tra ID của Order
         if (order.getId() == null || order.getId().isEmpty()) {
             throw new Exception("Order ID cannot be null or empty.");
         }
-        // Kiểm tra trùng lặp ID Order
-        Set<String> orderIds = existingFields.computeIfAbsent("orderIds", k -> new java.util.HashSet<>());
-        if (orderIds.contains(order.getId())) {
-            throw new Exception("Duplicate Order ID: " + order.getId());
-        } else {
-            orderIds.add(order.getId());
-        }
 
-        // Kiểm tra customerId
         if (order.getCustomerId() == null || order.getCustomerId().isEmpty()) {
             throw new Exception("Customer ID cannot be null or empty.");
         } else if (!isValidCustomerId(order.getCustomerId())) {
@@ -62,15 +53,10 @@ public class OrderValidator implements ModelValidator<Order> {
         }
     }
 
-    @Override
-    public void setExistingFields(Map<String, Set<String>> existingFields) {
-        this.existingFields = existingFields;
-    }
-
     // Phương thức kiểm tra customerId có tồn tại hay không
     private boolean isValidCustomerId(String customerId) {
-        for (Customer customer : customerList) {
-            if (customer.getId().equals(customerId)) {
+        for (Customer customer : customerList.values()) {
+            if (customerId.equals(customer.getId())) {
                 return true;
             }
         }
@@ -79,11 +65,6 @@ public class OrderValidator implements ModelValidator<Order> {
 
     // Phương thức kiểm tra productId có tồn tại hay không
     private boolean isValidProductId(String productId) {
-        for (Product product : productList) {
-            if (product.getId().equals(productId)) {
-                return true;
-            }
-        }
-        return false;
+        return productList.containsKey(productId);
     }
 }

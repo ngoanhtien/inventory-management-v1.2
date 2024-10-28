@@ -1,11 +1,21 @@
 package com.management.controller;
 
+import com.management.model.Customer;
+import com.management.model.Order;
+import com.management.model.Product;
+import com.management.service.CustomerService;
+import com.management.service.OrderService;
 import com.management.service.ProductService;
 import com.management.utils.ErrorLogger;
 import com.management.service.BaseService;
 
+import java.util.LinkedHashMap;
+import java.util.List;
+
 public class ProductController {
     private ProductService productService;
+    private CustomerService customerService;
+    private OrderService orderService;
     private ErrorLogger errorLogger;
 
     public ProductController() {
@@ -40,8 +50,19 @@ public class ProductController {
         errorLogger.close();
     }
 
+    public void top3Product(){
+        CustomerService customerService = new CustomerService(errorLogger);
+        LinkedHashMap<String, Product> p = productService.getData(BaseService.PRODUCT_INPUT_FILEPATH);
+        LinkedHashMap<String, Customer> c = customerService.getData(BaseService.CUSTOMER_INPUT_FILEPATH);
+        OrderService a = new OrderService(errorLogger, p, c);
+        LinkedHashMap<String, Order> o = a.getData(BaseService.ORDER_INPUT_FILEPATH);
+        productService.findTop3ProductsByOrderQuantity(o, p);
+        productService.writeData(BaseService.PRODUCT_OUTPUT_FILEPATH);
+        errorLogger.close();
+    }
+
     public static void main(String[] args) {
         ProductController productController = new ProductController();
-        productController.deleteProducts();
+        productController.top3Product();
     }
 }
