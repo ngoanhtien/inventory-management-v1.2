@@ -5,9 +5,9 @@ import com.management.model.Identifiable;
 import com.management.model.Order;
 import com.management.model.Product;
 import com.management.parser.ModelParser;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
+
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import com.management.utils.ErrorLogger;
@@ -18,22 +18,17 @@ public class DataLoader<K, T extends Identifiable<K>> {
     private ErrorLogger errorLogger;
     private ModelValidator<T> validator;
 
-//    private Map<String, Set<String>> existingFields;
-
     public DataLoader(ModelParser<T> parser, ModelValidator<T> validator, ErrorLogger errorLogger) {
         this.parser = parser;
         this.errorLogger = errorLogger;
         this.validator = validator;
-//        this.existingFields = new HashMap<>();
-
-        // Thiết lập existingFields cho validator
-//        this.validator.setExistingFields(this.existingFields);
     }
 
     public List<T> loadData(String filePath) {
         List<T> dataList = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
             String line;
+            br.readLine();
             while ((line = br.readLine()) != null) {
                 try {
                     T data = parser.parse(line);
@@ -49,10 +44,11 @@ public class DataLoader<K, T extends Identifiable<K>> {
         return dataList;
     }
 
-    public LinkedHashMap<K, T> loadDataToLinkedHashMap(String filePath) {
-        LinkedHashMap<K, T> dataLinkedHashMap = new LinkedHashMap<>();
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+    public Map<K, T> loadDataToLinkedHashMap(String filePath) {
+        Map<K, T> dataLinkedHashMap = new LinkedHashMap<>();
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(filePath), StandardCharsets.UTF_8))) {
             String line;
+            br.readLine();
             while ((line = br.readLine()) != null) {
                 try {
                     T data = parser.parse(line);
@@ -69,13 +65,12 @@ public class DataLoader<K, T extends Identifiable<K>> {
         return dataLinkedHashMap;
     }
 
-    // Phương thức getKey
     @SuppressWarnings("unchecked")
     private K getKey(T data) {
         if (data instanceof Product || data instanceof Order) {
-            return data.getId(); // Trả về id cho Product hoặc Order
+            return data.getId();
         } else if (data instanceof Customer) {
-            return (K) ((Customer) data).getPhoneNumber(); // Trả về phone number cho Customer
+            return (K) ((Customer) data).getPhoneNumber();
         }
         throw new IllegalArgumentException("Unable to determine key for data type: " + data.getClass().getSimpleName());
     }

@@ -11,18 +11,18 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class OrderService extends BaseService<String, Order> {
-    private LinkedHashMap<String, Product> productList;
-    private LinkedHashMap<String, Customer> customerList;
+    private Map<String, Product> productList;
+    private Map<String, Customer> customerList;
 
 
     public OrderService(ErrorLogger errorLogger,
-                        LinkedHashMap<String, Product> productList,
-                        LinkedHashMap<String, Customer> customerList) {
+                        Map<String, Product> productList,
+                        Map<String, Customer> customerList) {
         super(new OrderParser(), new OrderValidator(productList, customerList), errorLogger);
     }
 
     @Override
-    public LinkedHashMap<String, Order> getData(String inputFilePath) {
+    public Map<String, Order> getData(String inputFilePath) {
         dataMap = dataLoader.loadDataToLinkedHashMap(inputFilePath);
         return dataMap;
     }
@@ -31,7 +31,7 @@ public class OrderService extends BaseService<String, Order> {
     public void addDataList(String newDataFilePath) {
         //Load danh sach order moi len newDataMap
         //Them
-        LinkedHashMap<String, Order> newDataMap = dataLoader.loadDataToLinkedHashMap(newDataFilePath);
+        Map<String, Order> newDataMap = dataLoader.loadDataToLinkedHashMap(newDataFilePath);
 
         newDataMap.forEach((key, value) -> {
             if(dataMap.containsKey(key)) {
@@ -44,33 +44,34 @@ public class OrderService extends BaseService<String, Order> {
 
     @Override
     public void editDataList(String editDataFilePath) {
-        LinkedHashMap<String, Order> editDataMap = dataLoader.loadDataToLinkedHashMap(editDataFilePath);
+        Map<String, Order> editDataMap = dataLoader.loadDataToLinkedHashMap(editDataFilePath);
         dataMap.putAll(editDataMap);
     }
 
     @Override
     public void deleteDataList(String deleteDataFilePath) {
-        LinkedHashMap<String, Order> deleteDataMap = dataLoader.loadDataToLinkedHashMap(deleteDataFilePath);
+        Map<String, Order> deleteDataMap = dataLoader.loadDataToLinkedHashMap(deleteDataFilePath);
         deleteDataMap.forEach((key,value) -> {
-            dataMap.remove(key);
+            if(dataMap.containsKey(key)) {
+                dataMap.remove(key);
+            } else {
+                errorLogger.logError("Order is not exist to delete: " + key);
+            }
         });
     }
 
-    public LinkedHashMap<String, Order> hanldleFindOrdersByProductIds(LinkedHashMap<String, Order> orders, Set<String> productIds) {
-        return orders.entrySet().stream() // Duyệt qua các entry (cặp key-value) trong LinkedHashMap
-                .filter(entry -> entry.getValue().getProductQuantities().keySet().stream() // Lấy danh sách productId trong Order
-                        .anyMatch(productIds::contains)) // Kiểm tra nếu bất kỳ productId nào thuộc productIds
+    public Map<String, Order> hanldleFindOrdersByProductIds(Map<String, Order> orders, Set<String> productIds) {
+
+        dataMap = orders.entrySet().stream()
+                .filter(entry -> entry.getValue().getProductQuantities().keySet().stream()
+                        .anyMatch(productIds::contains))
                 .collect(Collectors.toMap(
-                        Map.Entry::getKey, // Key là id của Order
-                        Map.Entry::getValue, // Value là đối tượng Order
-                        (oldValue, newValue) -> oldValue, // Giải quyết trường hợp trùng key
-                        LinkedHashMap::new // Sử dụng LinkedHashMap để giữ thứ tự ban đầu
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (oldValue, newValue) -> oldValue,
+                        LinkedHashMap::new
                 ));
-    }
-
-    public LinkedHashMap<String, Order> hanldeSearchOrderByProductId(LinkedHashMap<String, Product> productList) {
-
-        return null;
+        return  dataMap;
     }
 
     @Override

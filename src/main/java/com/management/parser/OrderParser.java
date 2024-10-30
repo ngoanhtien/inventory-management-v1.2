@@ -11,7 +11,7 @@ public class OrderParser implements ModelParser<Order> {
 
     @Override
     public Order parse(String line) throws Exception {
-        String[] data = line.split(",");
+        String[] data = line.split(ModelParser.SPLIT_CHARACTER);
         if (line.isBlank()){
             throw new Exception("Empty line");
         } else if (data.length != 4) {
@@ -22,10 +22,8 @@ public class OrderParser implements ModelParser<Order> {
         String productsString = data[2].trim();
         String dateString = data[3].trim();
 
-        // Parse productQuantities
         Map<String, Integer> productQuantities = getStringIntegerMap(productsString);
 
-        // Parse orderDate
         OffsetDateTime orderDate;
         try {
             orderDate = OffsetDateTime.parse(dateString, DateTimeFormatter.ISO_OFFSET_DATE_TIME);
@@ -39,9 +37,7 @@ public class OrderParser implements ModelParser<Order> {
     private static Map<String, Integer> getStringIntegerMap(String productsString) throws Exception {
         Map<String, Integer> productQuantities = new HashMap<>();
         if (!productsString.isEmpty()) {
-            //Mảng productEntries chứa các cặp sản phẩm và số lượng
             String[] productEntries = productsString.split(";");
-            //Duyệt mảng
             for (String entry : productEntries) {
                 String[] productQuantity = entry.split(":");
                 if (productQuantity.length != 2) {

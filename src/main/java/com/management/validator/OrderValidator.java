@@ -6,14 +6,13 @@ import com.management.model.Product;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.Set;
 
 public class OrderValidator implements ModelValidator<Order> {
-    private LinkedHashMap<String, Product> productList;
-    private LinkedHashMap<String, Customer> customerList;
+    private Map<String, Product> productList;
+    private Map<String, Customer> customerList;
 
-    public OrderValidator(LinkedHashMap<String, Product> productList,
-                          LinkedHashMap<String, Customer> customerList) {
+    public OrderValidator(Map<String, Product> productList,
+                          Map<String, Customer> customerList) {
         this.productList = productList;
         this.customerList = customerList;
     }
@@ -30,7 +29,6 @@ public class OrderValidator implements ModelValidator<Order> {
             throw new Exception("Customer ID does not exist: " + order.getCustomerId());
         }
 
-        // Kiểm tra productQuantities
         if (order.getProductQuantities() == null || order.getProductQuantities().isEmpty()) {
             throw new Exception("Order must contain at least one product.");
         } else {
@@ -47,13 +45,11 @@ public class OrderValidator implements ModelValidator<Order> {
             }
         }
 
-        // Kiểm tra ngày đặt hàng
         if (order.getOrderDate() == null) {
             throw new Exception("Order date cannot be null.");
         }
     }
 
-    // Phương thức kiểm tra customerId có tồn tại hay không
     private boolean isValidCustomerId(String customerId) {
         for (Customer customer : customerList.values()) {
             if (customerId.equals(customer.getId())) {
@@ -63,7 +59,6 @@ public class OrderValidator implements ModelValidator<Order> {
         return false;
     }
 
-    // Phương thức kiểm tra productId có tồn tại hay không
     private boolean isValidProductId(String productId) {
         return productList.containsKey(productId);
     }

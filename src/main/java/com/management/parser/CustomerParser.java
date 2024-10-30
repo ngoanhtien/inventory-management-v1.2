@@ -5,7 +5,7 @@ import com.management.model.Customer;
 public class CustomerParser implements ModelParser<Customer> {
     @Override
     public Customer parse(String line) throws Exception {
-        String[] data = line.split(",");
+        String[] data = line.split(ModelParser.SPLIT_CHARACTER);
 
         if (line.isBlank()){
             throw new Exception("Empty line");

@@ -48,12 +48,10 @@ public class Customer implements CSVConvertible, Identifiable<String>{
 
     @Override
     public String toString() {
-        return "Customer{" +
-                "id='" + id + '\'' +
+        return "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                '}';
+                ", phoneNumber='" + phoneNumber;
     }
 
     @Override

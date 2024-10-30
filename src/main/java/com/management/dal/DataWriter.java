@@ -2,14 +2,13 @@ package com.management.dal;
 
 import com.management.model.CSVConvertible;
 
-import java.io.FileWriter;
-import java.io.BufferedWriter;
-import java.io.IOException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.Collection;
 
 public class DataWriter<T> {
     public void writeData(Collection<T> dataCollection, String filePath) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+        try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(filePath), StandardCharsets.UTF_8))) {
 
             for (T data : dataCollection) {
                 if (data instanceof CSVConvertible) {

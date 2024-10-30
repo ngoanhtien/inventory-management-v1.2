@@ -9,33 +9,35 @@ import com.management.utils.ErrorLogger;
 import com.management.validator.ModelValidator;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public abstract class BaseService<K, T extends Identifiable<K> & CSVConvertible> {
-    public static final String ERROR_FILEPATH = "src\\main\\resources\\data\\error.output.txt";
+    public static final String ERROR_FILEPATH = "src\\main\\resources\\data\\OutputFolder\\error.output.txt";
 
-    public static final String PRODUCT_OUTPUT_FILEPATH = "src\\main\\resources\\data\\output\\product.output.csv";
-    public static final String PRODUCT_INPUT_FILEPATH = "src\\main\\resources\\data\\origin\\product.origin.csv";
-    public static final String PRODUCT_NEW_FILEPATH = "src\\main\\resources\\data\\new\\products.new.csv";
-    public static final String PRODUCT_EDIT_FILEPATH = "src\\main\\resources\\data\\edit\\products.edit.csv";
-    public static final String PRODUCT_DELETE_FILEPATH = "src\\main\\resources\\data\\delete\\products.delete.csv";
+    public static final String PRODUCT_OUTPUT_FILEPATH = "src\\main\\resources\\data\\OutputFolder\\products.output.csv";
+    public static final String PRODUCT_INPUT_FILEPATH = "src\\main\\resources\\data\\InputFolder\\products.origin.csv";
+    public static final String PRODUCT_NEW_FILEPATH = "src\\main\\resources\\data\\InputFolder\\products.new.csv";
+    public static final String PRODUCT_EDIT_FILEPATH = "src\\main\\resources\\data\\InputFolder\\products.edit.csv";
+    public static final String PRODUCT_DELETE_FILEPATH = "src\\main\\resources\\data\\InputFolder\\products.delete.csv";
+    public static final String PRODUCT_SEARCH_FILEPATH = "src\\main\\resources\\data\\InputFolder\\productIds.search.csv";
 
-    public static final String CUSTOMER_OUTPUT_FILEPATH = "src\\main\\resources\\data\\output\\customer.output.csv";
-    public static final String CUSTOMER_INPUT_FILEPATH = "src\\main\\resources\\data\\origin\\customer.origin.csv";
-    public static final String CUSTOMER_NEW_FILEPATH = "src\\main\\resources\\data\\new\\customer.new.csv";
-    public static final String CUSTOMER_EDIT_FILEPATH = "src\\main\\resources\\data\\edit\\customer.edit.csv";
-    public static final String CUSTOMER_DELETE_FILEPATH = "src\\main\\resources\\data\\delete\\customer.delete.csv";
+    public static final String CUSTOMER_OUTPUT_FILEPATH = "src\\main\\resources\\data\\OutputFolder\\customers.output.csv";
+    public static final String CUSTOMER_INPUT_FILEPATH = "src\\main\\resources\\data\\InputFolder\\customers.origin.csv";
+    public static final String CUSTOMER_NEW_FILEPATH = "src\\main\\resources\\data\\InputFolder\\customers.new.csv";
+    public static final String CUSTOMER_EDIT_FILEPATH = "src\\main\\resources\\data\\InputFolder\\customers.edit.csv";
+    public static final String CUSTOMER_DELETE_FILEPATH = "src\\main\\resources\\data\\InputFolder\\customers.delete.csv";
 
-    public static final String ORDER_OUTPUT_FILEPATH = "src\\main\\resources\\data\\output\\order.output.csv";
-    public static final String ORDER_INPUT_FILEPATH = "src\\main\\resources\\data\\origin\\order.origin.csv";
-    public static final String ORDER_NEW_FILEPATH = "src\\main\\resources\\data\\new\\order.new.csv";
-    public static final String ORDER_EDIT_FILEPATH = "src\\main\\resources\\data\\edit\\order.edit.csv";
-    public static final String ORDER_DELETE_FILEPATH = "src\\main\\resources\\data\\delete\\order.delete.csv";
+    public static final String ORDER_OUTPUT_FILEPATH = "src\\main\\resources\\data\\OutputFolder\\orders.output.csv";
+    public static final String ORDER_INPUT_FILEPATH = "src\\main\\resources\\data\\InputFolder\\orders.origin.csv";
+    public static final String ORDER_NEW_FILEPATH = "src\\main\\resources\\data\\InputFolder\\orders.new.csv";
+    public static final String ORDER_EDIT_FILEPATH = "src\\main\\resources\\data\\InputFolder\\orders.edit.csv";
+    public static final String ORDER_DELETE_FILEPATH = "src\\main\\resources\\data\\InputFolder\\orders.delete.csv";
 
     protected DataLoader<K, T> dataLoader;
     protected DataWriter<T> dataWriter;
     protected ErrorLogger errorLogger;
 
-    protected LinkedHashMap<K, T> dataMap;
+    protected Map<K, T> dataMap;
 
     public BaseService(ModelParser<T> parser, ModelValidator<T> validator, ErrorLogger errorLogger) {
         this.errorLogger = errorLogger;
@@ -44,7 +46,7 @@ public abstract class BaseService<K, T extends Identifiable<K> & CSVConvertible>
         dataMap = new LinkedHashMap<>();
     }
 
-    public abstract LinkedHashMap<K, T> getData(String inputFilePath);
+    public abstract Map<K, T> getData(String inputFilePath);
 
     public abstract void addDataList(String newDataFilePath);
 

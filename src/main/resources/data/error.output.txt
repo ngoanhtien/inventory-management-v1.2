@@ -1,1 +1,0 @@
-Duplicate ID CUS0004 for customer Customer{id='CUS0004', name='Nguyễn Thanh thành', email='faylv6de@gmail.com', phoneNumber='0373604099'}

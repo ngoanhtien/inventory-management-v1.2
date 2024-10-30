@@ -5,7 +5,7 @@ import com.management.model.Product;
 public class ProductParser implements ModelParser<Product> {
     @Override
     public Product parse(String line) throws Exception {
-        String[] data = line.split(",");
+        String[] data = line.split(ModelParser.SPLIT_CHARACTER);
 
         if (line.isBlank()){
             throw new Exception("Empty line");

@@ -9,60 +9,59 @@ import com.management.service.ProductService;
 import com.management.utils.ErrorLogger;
 import com.management.service.BaseService;
 
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.io.File;
+import java.util.Map;
 
-public class ProductController {
+public class ProductController{
     private ProductService productService;
     private CustomerService customerService;
     private OrderService orderService;
     private ErrorLogger errorLogger;
+    private Map<String, Product> products;
+    private Map<String, Customer> customers;
+    private String folderPath;
 
-    public ProductController() {
-        this.errorLogger = new ErrorLogger(BaseService.ERROR_FILEPATH);
+    public ProductController(String folderPath) {
+        this.folderPath = folderPath;
+        this.errorLogger = new ErrorLogger(folderPath + File.separator + BaseService.ERROR_FILEPATH);
         this.productService = new ProductService(errorLogger);
+        this.customerService = new CustomerService(errorLogger);
+        this.products = productService.getData(folderPath + File.separator + BaseService.PRODUCT_INPUT_FILEPATH);
+        this.customers = customerService.getData(folderPath + File.separator + BaseService.CUSTOMER_INPUT_FILEPATH);
+        this.orderService = new OrderService(errorLogger, products, customers);
     }
 
     public void loadProducts() {
-        productService.getData(BaseService.PRODUCT_INPUT_FILEPATH);
-        productService.writeData(BaseService.PRODUCT_OUTPUT_FILEPATH);
+        productService.getData(folderPath + File.separator + BaseService.PRODUCT_INPUT_FILEPATH);
+        productService.writeData(folderPath + File.separator + BaseService.PRODUCT_OUTPUT_FILEPATH);
         errorLogger.close();
     }
 
     public void addProducts() {
-        productService.getData(BaseService.PRODUCT_INPUT_FILEPATH);
-        productService.addDataList(BaseService.PRODUCT_NEW_FILEPATH);
-        productService.writeData(BaseService.PRODUCT_OUTPUT_FILEPATH);
+        productService.getData(folderPath + File.separator + BaseService.PRODUCT_INPUT_FILEPATH);
+        productService.addDataList(folderPath + File.separator + BaseService.PRODUCT_NEW_FILEPATH);
+        productService.writeData(folderPath + File.separator + BaseService.PRODUCT_OUTPUT_FILEPATH);
         errorLogger.close();
     }
 
     public void updateProducts() {
-        productService.getData(BaseService.PRODUCT_INPUT_FILEPATH);
-        productService.editDataList(BaseService.PRODUCT_EDIT_FILEPATH);
-        productService.writeData(BaseService.PRODUCT_OUTPUT_FILEPATH);
+        productService.getData(folderPath + File.separator + BaseService.PRODUCT_INPUT_FILEPATH);
+        productService.editDataList(folderPath + File.separator + BaseService.PRODUCT_EDIT_FILEPATH);
+        productService.writeData(folderPath + File.separator + BaseService.PRODUCT_OUTPUT_FILEPATH);
         errorLogger.close();
     }
 
     public void deleteProducts() {
-        productService.getData(BaseService.PRODUCT_INPUT_FILEPATH);
-        productService.deleteDataList(BaseService.PRODUCT_DELETE_FILEPATH);
-        productService.writeData(BaseService.PRODUCT_OUTPUT_FILEPATH);
+        productService.getData(folderPath + File.separator + BaseService.PRODUCT_INPUT_FILEPATH);
+        productService.deleteDataList(folderPath + File.separator + BaseService.PRODUCT_DELETE_FILEPATH);
+        productService.writeData(folderPath + File.separator + BaseService.PRODUCT_OUTPUT_FILEPATH);
         errorLogger.close();
     }
 
-    public void top3Product(){
-        CustomerService customerService = new CustomerService(errorLogger);
-        LinkedHashMap<String, Product> p = productService.getData(BaseService.PRODUCT_INPUT_FILEPATH);
-        LinkedHashMap<String, Customer> c = customerService.getData(BaseService.CUSTOMER_INPUT_FILEPATH);
-        OrderService a = new OrderService(errorLogger, p, c);
-        LinkedHashMap<String, Order> o = a.getData(BaseService.ORDER_INPUT_FILEPATH);
-        productService.findTop3ProductsByOrderQuantity(o, p);
-        productService.writeData(BaseService.PRODUCT_OUTPUT_FILEPATH);
+    public void top3ProductBestSeller(){
+        Map<String, Order> o = orderService.getData(folderPath + File.separator + BaseService.ORDER_INPUT_FILEPATH);
+        productService.findTop3ProductsByOrderQuantity(o, products);
+        productService.writeData(folderPath + File.separator + BaseService.PRODUCT_OUTPUT_FILEPATH);
         errorLogger.close();
-    }
-
-    public static void main(String[] args) {
-        ProductController productController = new ProductController();
-        productController.top3Product();
     }
 }

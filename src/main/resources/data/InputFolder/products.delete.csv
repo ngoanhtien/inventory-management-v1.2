@@ -1,7 +1,7 @@
 id,name,price,Stock Available
 P0001,Nồi cơm điện,96.92,83
 P0002,Bình giữ nhiệt,563.72,839
-P0002,Ốp lưng điện thoại,613.13,663
+P0003,Ốp lưng điện thoại,613.13,663
 P0004,Áo thun nam,176.04,239
 P0005,Sách tiếng Anh,643.71,263
 P0006,Máy ảnh mirrorless,263.13,993
@@ -183,7 +183,7 @@ P0181,Sách tiếng Anh,330.95,853
 P0182,Nồi cơm điện,495.68,56
 P0183,Bàn phím cơ,902.21,527
 P0184,Sách tiếng Anh,484.31,704
-P0185,Đồng hồ thông minh,427.61,31
+P0185,Đồng hồ thông minh,427.61,500
 P0186,Bàn phím cơ,241.01,711
 P0187,Đồng hồ thông minh,862.71,68
 P0188,Túi xách da,240.22,427
@@ -227,7 +227,7 @@ P0225,Bộ dụng cụ nấu ăn,25.17,38
 P0226,Nồi cơm điện,284.07,651
 P0227,Quần jean nữ,709.02,352
 P0228,Gối ôm,523.83,904
-P0229,Ốp lưng điện thoại,486.27,33
+P0229,Ốp lưng điện thoại,486.27,500
 P0230,Bộ dụng cụ nấu ăn,114.58,374
 P0231,Nồi cơm điện,495.59,122
 P0232,Áo thun nam,73.24,753
@@ -989,13 +989,4 @@ P0987,Bình giữ nhiệt,437.56,78
 P0988,Đồng hồ thông minh,873.25,172
 P0989,Bình giữ nhiệt,209.32,276
 P0990,Đồng hồ thông minh,397.59,938
-P0991,Máy ảnh mirrorless,583.19,426
-P0992,Quần jean nữ,601.8,629
-P0993,Gối ôm,498.53,106
-P0994,Bình giữ nhiệt,331.91,192
-P0995,Quần jean nữ,146.16,751
-P0996,Túi xách da,197.83,401
-P0997,Bộ dụng cụ nấu ăn,484.31,679
-P0998,Túi xách da,94.92,677
-P0999,Kem chống nắng,20.91,975
-P1000,Túi xách da,981.0,826
+P5235345,Product Error,345,435

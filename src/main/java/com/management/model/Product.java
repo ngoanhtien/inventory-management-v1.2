@@ -48,12 +48,10 @@ public class Product implements CSVConvertible, Identifiable<String>{
 
     @Override
     public String toString() {
-        return "Product{" +
-                "id='" + id + '\'' +
+        return "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", price=" + price +
-                ", stockAvailable=" + stockAvailable +
-                '}';
+                ", stockAvailable=" + stockAvailable;
     }
 
     @Override

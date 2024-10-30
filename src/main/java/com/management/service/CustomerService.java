@@ -7,6 +7,7 @@ import com.management.validator.CustomerValidator;
 
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CustomerService extends BaseService<String, Customer> {
 
@@ -15,7 +16,7 @@ public class CustomerService extends BaseService<String, Customer> {
     }
 
     @Override
-    public LinkedHashMap<String, Customer> getData(String inputFilePath) {
+    public Map<String, Customer> getData(String inputFilePath) {
         List<Customer> customerList = dataLoader.loadData(inputFilePath);
 
         customerList.forEach(customer -> {
@@ -52,54 +53,47 @@ public class CustomerService extends BaseService<String, Customer> {
 //            2.3. if trùng id thì ghi lỗi trùng id
 //            2.4. if trùng email thì ghi lỗi trùng email
 //            2.5. else thêm mới
-        LinkedHashMap<String, Customer> newDataMap = dataLoader.loadDataToLinkedHashMap(newDataFilePath);
+        Map<String, Customer> newDataMap = dataLoader.loadDataToLinkedHashMap(newDataFilePath);
 
         newDataMap.forEach((newPhoneNumber, newCustomer) -> {
             String newId = newCustomer.getId();
             String newEmail = newCustomer.getEmail();
             String newName = newCustomer.getName();
 
-            // 1.1 Check if a customer with the same phoneNumber exists in dataMap
             if (dataMap.containsKey(newPhoneNumber)) {
                 Customer existingCustomer = dataMap.get(newPhoneNumber);
 
-                // If the IDs are the same
                 boolean idDuplicate = dataMap.values().stream().anyMatch(customer -> customer.getId().equals(newId));
                 if (idDuplicate) {
-                    // 2.1. If emails are the same
                     boolean emailDuplicate = dataMap.values().stream().anyMatch(customer -> customer.getEmail().equals(newEmail));
                     if (emailDuplicate) {
-                        existingCustomer.setName(newName); // 3.1: Only update name if email matches
+                        existingCustomer.setName(newName);
                     } else {
-                        existingCustomer.setEmail(newEmail); // 3.2: Update email and name if email differs
+                        existingCustomer.setEmail(newEmail);
                         existingCustomer.setName(newName);
                     }
-                } else { // 2.2. If IDs do not match
-                    existingCustomer.setId(newId); // Update ID, email, and name
+                } else {
+                    existingCustomer.setId(newId);
 
-                    // Check email duplicate
                     boolean emailDuplicate = dataMap.values().stream().anyMatch(customer -> customer.getEmail().equals(newEmail));
                     if (emailDuplicate) {
-                        existingCustomer.setName(newName); // 3.3: Only update name if email matches
+                        existingCustomer.setName(newName);
                     } else {
-                        existingCustomer.setEmail(newEmail); // 3.4: Update email and name if email differs
+                        existingCustomer.setEmail(newEmail);
                         existingCustomer.setName(newName);
                     }
                 }
                 dataMap.put(newPhoneNumber, existingCustomer);
-            } else { // 1.2 If no customer with the same phoneNumber exists
+            } else {
                 boolean idDuplicate = dataMap.values().stream().anyMatch(customer -> customer.getId().equals(newId));
                 boolean emailDuplicate = dataMap.values().stream().anyMatch(customer -> customer.getEmail().equals(newEmail));
 
-                // 2.3 Check for duplicate id and log an error if found
                 if (idDuplicate) {
                     errorLogger.logError("Duplicate ID " + newId + " for customer " + newCustomer);
                 }
-                // 2.4 Check for duplicate email and log an error if found
                 else if (emailDuplicate) {
                     errorLogger.logError("Duplicate email " + newEmail + " for customer " + newCustomer);
                 }
-                // 2.5 If no duplicates are found, add the new customer
                 else {
                     dataMap.put(newPhoneNumber, newCustomer);
                 }
@@ -109,23 +103,26 @@ public class CustomerService extends BaseService<String, Customer> {
 
     @Override
     public void editDataList(String editDataFilePath) {
-        LinkedHashMap<String, Customer> editDataMap = dataLoader.loadDataToLinkedHashMap(editDataFilePath);
-        dataMap.putAll(editDataMap);
+        Map<String, Customer> editDataMap = dataLoader.loadDataToLinkedHashMap(editDataFilePath);
         editDataMap.forEach((key, value) -> {
             if(dataMap.containsKey(key)) {
                 dataMap.put(key, value);
             } else {
-                errorLogger.logError("Not exist key " + key);
+                errorLogger.logError("Not exist customer has phone number: " + value.getPhoneNumber());
             }
         });
     }
 
     @Override
     public void deleteDataList(String deleteDataFilePath) {
-        LinkedHashMap<String, Customer> deleteDataMap = dataLoader.loadDataToLinkedHashMap(deleteDataFilePath);
+        Map<String, Customer> deleteDataMap = dataLoader.loadDataToLinkedHashMap(deleteDataFilePath);
 
         deleteDataMap.forEach((key, value) -> {
-            dataMap.remove(key);
+            if(dataMap.containsKey(key)) {
+                dataMap.remove(key);
+            } else {
+                errorLogger.logError("Customer is not exist to delete " + key);
+            }
         });
     }
 

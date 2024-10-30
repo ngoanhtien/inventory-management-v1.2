@@ -9,6 +9,7 @@ import com.management.validator.ProductValidator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class ProductService extends BaseService<String, Product> {
@@ -18,7 +19,7 @@ public class ProductService extends BaseService<String, Product> {
     }
 
     @Override
-    public LinkedHashMap<String, Product> getData(String inputFilePath) {
+    public Map<String, Product> getData(String inputFilePath) {
         List<Product> productList = dataLoader.loadData(inputFilePath);
         dataMap = new LinkedHashMap<>();
 
@@ -35,7 +36,7 @@ public class ProductService extends BaseService<String, Product> {
 
     @Override
     public void addDataList(String newDataFilePath) {
-        LinkedHashMap<String, Product> newDataMap = dataLoader.loadDataToLinkedHashMap(newDataFilePath);
+        Map<String, Product> newDataMap = dataLoader.loadDataToLinkedHashMap(newDataFilePath);
 
         newDataMap.forEach((key,value) -> {
             if(dataMap.containsKey(key)) {
@@ -48,36 +49,51 @@ public class ProductService extends BaseService<String, Product> {
 
     @Override
     public void editDataList(String editDataFilePath) {
-        LinkedHashMap<String, Product> editDataMap = dataLoader.loadDataToLinkedHashMap(editDataFilePath);
+        Map<String, Product> editDataMap = dataLoader.loadDataToLinkedHashMap(editDataFilePath);
         dataMap.putAll(editDataMap);
     }
 
     @Override
     public void deleteDataList(String deleteDataFilePath) {
-        LinkedHashMap<String, Product> deleteDataMap = dataLoader.loadDataToLinkedHashMap(deleteDataFilePath);
+        Map<String, Product> deleteDataMap = dataLoader.loadDataToLinkedHashMap(deleteDataFilePath);
         deleteDataMap.forEach((key,value) -> {
-            dataMap.remove(key);
+            if(dataMap.containsKey(key)) {
+                dataMap.remove(key);
+            } else {
+                errorLogger.logError("Product is not exist to delete: " + key);
+            }
         });
     }
 
-    public void findTop3ProductsByOrderQuantity(LinkedHashMap<String, Order> orders, LinkedHashMap<String, Product> products) {
-        // Tính tổng số lượng order cho mỗi productId
-        dataMap = orders.values().stream() // Duyệt qua các giá trị (Order) trong LinkedHashMap
-                .flatMap(order -> order.getProductQuantities().entrySet().stream()) // Duyệt qua tất cả các product của mỗi order
+    public void findTop3ProductsByOrderQuantity(Map<String, Order> orders, Map<String, Product> products) {
+        dataMap = orders.values().stream()
+                .flatMap(order -> order.getProductQuantities().entrySet().stream())
                 .collect(Collectors.groupingBy(
-                        Map.Entry::getKey, // Nhóm theo productId
-                        Collectors.summingInt(Map.Entry::getValue) // Tính tổng quantity cho mỗi productId
+                        Map.Entry::getKey,
+                        Collectors.summingInt(Map.Entry::getValue)
                 ))
                 .entrySet().stream()
-                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed()) // Sắp xếp giảm dần theo số lượng order
-                .limit(3) // Lấy top 3
-                .filter(entry -> products.containsKey(entry.getKey())) // Kiểm tra productId có tồn tại trong products
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .limit(3)
+                .filter(entry -> products.containsKey(entry.getKey()))
                 .collect(Collectors.toMap(
-                        Map.Entry::getKey, // Key là productId
-                        entry -> products.get(entry.getKey()), // Value là Product tương ứng
-                        (oldValue, newValue) -> oldValue, // Giải quyết trường hợp trùng key
-                        LinkedHashMap::new // Sử dụng LinkedHashMap để giữ thứ tự
+                        Map.Entry::getKey,
+                        entry -> products.get(entry.getKey()),
+                        (oldValue, newValue) -> oldValue,
+                        LinkedHashMap::new
                 ));
+    }
+
+    public Set<String> getProductIds() {
+        List<Product> products = dataLoader.loadData(BaseService.PRODUCT_SEARCH_FILEPATH);
+
+        return products.stream()
+                .map(Product::getId)
+                .collect(Collectors.toSet());
+    }
+
+    public List<Product> getProductList(){
+        return dataLoader.loadData(BaseService.PRODUCT_INPUT_FILEPATH);
     }
 
     @Override

@@ -9,63 +9,62 @@ import com.management.service.ProductService;
 import com.management.utils.ErrorLogger;
 import com.management.service.BaseService;
 
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.io.File;
 import java.util.Map;
+import java.util.Set;
 
 public class OrderController {
     private OrderService orderService;
-    protected ProductService productService;
     private ErrorLogger errorLogger;
-//    private Map<String, String> customerIdToPhoneNumberMap;
+    private ProductService productService;
+    private CustomerService customerService;
+    Map<String, Product> productList;
+    Map<String, Customer> customerList;
+    private String folderPath;
 
-
-    public OrderController(LinkedHashMap<String, Product> productList,
-                           LinkedHashMap<String, Customer> customerList) {
-        this.errorLogger = new ErrorLogger(BaseService.ERROR_FILEPATH);
+    public OrderController(String folderPath){
+        this.folderPath = folderPath;
+        this.errorLogger = new ErrorLogger(folderPath + File.separator + BaseService.ERROR_FILEPATH);
+        this.productService = new ProductService(errorLogger);
+        this.customerService = new CustomerService(errorLogger);
+        this.productList = productService.getData(folderPath + File.separator + BaseService.PRODUCT_INPUT_FILEPATH);
+        this.customerList = customerService.getData(folderPath + File.separator + BaseService.CUSTOMER_INPUT_FILEPATH);
         this.orderService = new OrderService(errorLogger, productList, customerList);
-    }
+    } ;
 
     public void loadOrders(){
-        orderService.getData(BaseService.ORDER_INPUT_FILEPATH);
-        orderService.writeData(BaseService.ORDER_OUTPUT_FILEPATH);
+        orderService.getData(folderPath + File.separator + BaseService.ORDER_INPUT_FILEPATH);
+        orderService.writeData(folderPath + File.separator + BaseService.ORDER_OUTPUT_FILEPATH);
         errorLogger.close();
     }
 
     public void addOrders() {
-        orderService.getData(BaseService.ORDER_INPUT_FILEPATH);
-        orderService.addDataList(BaseService.ORDER_NEW_FILEPATH);
-        orderService.writeData(BaseService.ORDER_OUTPUT_FILEPATH);
+        orderService.getData(folderPath + File.separator + BaseService.ORDER_INPUT_FILEPATH);
+        orderService.addDataList(folderPath + File.separator + BaseService.ORDER_NEW_FILEPATH);
+        orderService.writeData(folderPath + File.separator + BaseService.ORDER_OUTPUT_FILEPATH);
         errorLogger.close();
     }
 
     public void updateOrders() {
-        orderService.getData(BaseService.ORDER_INPUT_FILEPATH);
-        orderService.editDataList(BaseService.ORDER_EDIT_FILEPATH);
-        orderService.writeData(BaseService.ORDER_OUTPUT_FILEPATH);
+        orderService.getData(folderPath + File.separator + BaseService.ORDER_INPUT_FILEPATH);
+        orderService.editDataList(folderPath + File.separator + BaseService.ORDER_EDIT_FILEPATH);
+        orderService.writeData(folderPath + File.separator + BaseService.ORDER_OUTPUT_FILEPATH);
         errorLogger.close();
     }
 
     public void deleteOrders() {
-        orderService.getData(BaseService.ORDER_INPUT_FILEPATH);
-        orderService.deleteDataList(BaseService.ORDER_DELETE_FILEPATH);
-        orderService.writeData(BaseService.ORDER_OUTPUT_FILEPATH);
+        orderService.getData(folderPath + File.separator + BaseService.ORDER_INPUT_FILEPATH);
+        orderService.deleteDataList(folderPath + File.separator + BaseService.ORDER_DELETE_FILEPATH);
+        orderService.writeData(folderPath + File.separator + BaseService.ORDER_OUTPUT_FILEPATH);
         errorLogger.close();
     }
 
     public void searchOrderByProductId(){
-
-    }
-
-    public static void main(String[] args) {
-        ErrorLogger errorLogger = new ErrorLogger(BaseService.ERROR_FILEPATH);
-        ProductService productService = new ProductService(errorLogger);
-        CustomerService customerService = new CustomerService(errorLogger);
-        LinkedHashMap<String, Product> productList = productService.getData(BaseService.PRODUCT_INPUT_FILEPATH);
-        LinkedHashMap<String, Customer> customerList = customerService.getData(BaseService.CUSTOMER_INPUT_FILEPATH);
-//        Map<String, String> customerIdToPhoneNumberMap = new LinkedHashMap<>();
-        OrderController orderController = new OrderController(productList, customerList);
-//        orderController.deleteOrders();
-        orderController.searchOrderByProductId();
+        OrderService newOrderService = new OrderService(errorLogger, productList, customerList);
+        Map<String, Order> orderMap = newOrderService.getData(folderPath + File.separator + BaseService.ORDER_INPUT_FILEPATH);
+        Set<String> productIds = productService.getProductIds();
+        orderService.hanldleFindOrdersByProductIds(orderMap, productIds);
+        orderService.writeData(folderPath + File.separator + BaseService.ORDER_OUTPUT_FILEPATH);
+        errorLogger.close();
     }
 }
