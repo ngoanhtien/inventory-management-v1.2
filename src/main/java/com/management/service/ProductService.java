@@ -74,7 +74,7 @@ public class ProductService extends BaseService<String, Product> {
                 ))
                 .entrySet().stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                .limit(3)
+                .limit(10)
                 .filter(entry -> products.containsKey(entry.getKey()))
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
