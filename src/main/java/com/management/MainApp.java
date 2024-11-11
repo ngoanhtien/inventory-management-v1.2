@@ -24,9 +24,6 @@ public class MainApp {
             return;
         }
 
-//        String functionCode = "1";
-//        String folderPath = "D:\\Downloads\\NgoAnhTien_JavaFresher_Mock1_V1.2";
-
         ProductController productController = new ProductController(folderPath);
         CustomerController customerController = new CustomerController(folderPath);
         OrderController orderController = new OrderController(folderPath);
