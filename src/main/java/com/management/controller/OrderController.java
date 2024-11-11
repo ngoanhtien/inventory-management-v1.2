@@ -62,7 +62,7 @@ public class OrderController {
     public void searchOrderByProductId(){
         OrderService newOrderService = new OrderService(errorLogger, productList, customerList);
         Map<String, Order> orderMap = newOrderService.getData(folderPath + File.separator + BaseService.ORDER_INPUT_FILEPATH);
-        Set<String> productIds = productService.getProductIds();
+        Set<String> productIds = productService.getProductIds(folderPath);
         orderService.hanldleFindOrdersByProductIds(orderMap, productIds);
         orderService.writeData(folderPath + File.separator + BaseService.ORDER_OUTPUT_FILEPATH);
         errorLogger.close();

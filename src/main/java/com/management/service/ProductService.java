@@ -6,6 +6,7 @@ import com.management.parser.ProductParser;
 import com.management.utils.ErrorLogger;
 import com.management.validator.ProductValidator;
 
+import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -84,8 +85,8 @@ public class ProductService extends BaseService<String, Product> {
                 ));
     }
 
-    public Set<String> getProductIds() {
-        List<Product> products = dataLoader.loadData(BaseService.PRODUCT_SEARCH_FILEPATH);
+    public Set<String> getProductIds(String folderPath) {
+        List<Product> products = dataLoader.loadData(folderPath + File.separator + BaseService.PRODUCT_SEARCH_FILEPATH);
 
         return products.stream()
                 .map(Product::getId)
